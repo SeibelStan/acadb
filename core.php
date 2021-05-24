@@ -1,5 +1,8 @@
 <?php
 
+define('ROOT', 'acadb/');
+define('DEV', 1);
+
 function render($rp) {
     if (preg_match('/^static/', $rp)) {
         require($rp);
@@ -11,9 +14,14 @@ function render($rp) {
     if (preg_match('/\.md$/', $frp)) {
         $c = markdown($rp);
     }
+    elseif (preg_match('/\.txt$/', $frp)) {
+        $c = text($rp);
+    }
     else {
         $c = preproc($rp);
     }
+
+    if (!file_exists('temp')) { mkdir('temp'); }
 
     $trp = preg_replace('/\//', '.', $frp);
     $f = fopen("temp/$trp", 'w+');
@@ -26,6 +34,8 @@ function render($rp) {
     }
 
     require("temp/$trp");
+
+    rm('temp');
 
     if ($statgen) {
         $brp = basename($frp);
@@ -44,8 +54,11 @@ function render($rp) {
 
 function preproc($rp) {
     $c = file_get_contents($rp);
-    $c = preg_replace('/\{\{(.+?\.md)\}\}/', "<?php render('source/markdown/$1') ?>", $c);
-    $c = preg_replace('/\{\{(.+?)\}\}/', "<?php render('source/modules/$1.php') ?>", $c);
+
+    $c = preg_replace('/\{\{(.+?\.php)\}\}/', "<?php require('source/php/$1') ?>", $c);
+    $c = preg_replace('/\{\{(.+?\.md)\}\}/', "<?php render('source/md/$1') ?>", $c);
+    $c = preg_replace('/\{\{(.+?\.txt)\}\}/', "<?php render('source/txt/$1') ?>", $c);
+    $c = preg_replace('/\{\{(.+?)\}\}/', "<?php render('source/php/$1.php') ?>", $c);
     $c = preg_replace('/@else/', "<?php else : ?>", $c);
     $c = preg_replace('/@e(\w+)(.+)/', "<?php end$1; ?>", $c);
     $c = preg_replace('/@(\w+)(.+)/', "<?php $1 ($2) : ?>", $c);
@@ -56,6 +69,7 @@ function preproc($rp) {
 
 function markdown($rp) {
     $c = file_get_contents($rp);
+
     $c = preg_replace('/^### (.+?)(\s*)$/m', "<h3>$1</h3>$2", $c);
     $c = preg_replace('/^## (.+?)(\s*)$/m', "<h2>$1</h2>$2", $c);
     $c = preg_replace('/^# (.+?)(\s*)$/m', "<h1>$1</h1>$2", $c);
@@ -90,6 +104,39 @@ function markdown($rp) {
     $c = preg_replace("/```([\s\S]+?)```/m", "<code>$1</code>$2", $c);
     $c = preg_replace("/`(.+?)`/", "<code>$1</code>$2", $c);
     
-    $c = preg_replace("/^ +(\S.+?)(\s*)$/m", "<p>$1</p>$2", $c);
+    $c = preg_replace("/^(<img |<a |<span|<strong|<em)*([^<\s].*?)(\s*)$/m", "<p>$1$2</p>$3", $c);
     return $c;
+}
+
+function text($rp) {
+    $c = file_get_contents($rp);
+    $c = nl2br($c);
+    return $c;
+}
+
+function rm($dir) {
+    if (!file_exists($dir)) {
+        return false;
+    }
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($dir),
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
+
+    foreach ($iterator as $path) {
+        if ($path->isDir()) {
+            @rmdir($path);
+        }
+        else {
+            unlink($path);
+        }
+    }
+    rmdir($dir);
+}
+
+function siteurl() {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domainName = $_SERVER['HTTP_HOST'] . '/';
+    return $protocol . $domainName;
 }

@@ -3,16 +3,14 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-define('ROOT', 'acadb/');
-define('DEV', 1);
-
 if (!file_exists('source')) { mkdir('source'); }
 if (!file_exists('static')) { mkdir('static'); }
-if (!file_exists('temp')) { mkdir('temp'); }
 
 require('core.php');
 
-$path = preg_replace('/^\//', '', $_SERVER['REQUEST_URI']);
+$URI = $_SERVER['REQUEST_URI'];
+
+$path = preg_replace('/^\//', '', $URI);
 $path = explode('?', preg_replace('#' . ROOT . '#', '', $path))[0] ?: 'index';
 
 $sp = "static/$path.html";

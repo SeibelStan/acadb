@@ -1,5 +1,9 @@
 {{header}}
 
+{{raw.php}}
+
+{{text.txt}}
+
 {{doc.md}}
 
 {x='XVAL'}
