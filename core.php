@@ -70,6 +70,9 @@ function preproc($rp) {
 function markdown($rp) {
     $c = file_get_contents($rp);
 
+    $c = preg_replace('/^###### (.+?)(\s*)$/m', "<h6>$1</h6>$2", $c);
+    $c = preg_replace('/^##### (.+?)(\s*)$/m', "<h5>$1</h5>$2", $c);
+    $c = preg_replace('/^#### (.+?)(\s*)$/m', "<h4>$1</h4>$2", $c);
     $c = preg_replace('/^### (.+?)(\s*)$/m', "<h3>$1</h3>$2", $c);
     $c = preg_replace('/^## (.+?)(\s*)$/m', "<h2>$1</h2>$2", $c);
     $c = preg_replace('/^# (.+?)(\s*)$/m', "<h1>$1</h1>$2", $c);
