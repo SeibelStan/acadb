@@ -8,13 +8,6 @@ function render($rp) {
 
     $frp = preg_replace('/^(static|source)\//', '', $rp);
 
-    if (!file_exists('static')) {
-        mkdir('static');
-    }
-    if (!file_exists('temp')) {
-        mkdir('temp');
-    }
-
     if (preg_match('/\.md$/', $frp)) {
         $c = markdown($rp);
     }

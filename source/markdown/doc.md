@@ -2,7 +2,7 @@
 ## h2
 ### h3
 
- this is `code` inline
+ this is `inline code` in p
 
  ppp
 
