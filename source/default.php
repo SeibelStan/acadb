@@ -1,6 +1,6 @@
 {{header}}
 
-{index = explode("\n", file_get_contents('sitemap.txt'));}
+{index = explode("\n", file_get_contents('build-index.txt'));}
 
 <ul>
 @foreach $index as $row
