@@ -4,12 +4,10 @@ require('core.php');
 
 rm('static');
 
-$source = scandir('source');
+$index = explode("\n", file_get_contents('sitemap.txt'));
 
-foreach ($source as $unit) {
-    if ($unit == '.' || $unit == '..' || is_dir("source/$unit")) {
-        continue;
-    }
-    $url = siteurl() . ROOT . preg_replace('/\.\w+$/', '', $unit);
+foreach ($index as $row) {
+    $url = siteurl() . ROOT . $row;
     file_get_contents($url);
+    echo '<a href="' . $url . '">' . $url . '</a><br>';
 }
