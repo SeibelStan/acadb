@@ -70,29 +70,30 @@ function preproc($rp) {
 function markdown($rp) {
     $c = file_get_contents($rp);
 
-    $c = preg_replace('/^###### (.+?)(\s*)$/m', "<h6>$1</h6>$2", $c);
-    $c = preg_replace('/^##### (.+?)(\s*)$/m', "<h5>$1</h5>$2", $c);
-    $c = preg_replace('/^#### (.+?)(\s*)$/m', "<h4>$1</h4>$2", $c);
-    $c = preg_replace('/^### (.+?)(\s*)$/m', "<h3>$1</h3>$2", $c);
-    $c = preg_replace('/^## (.+?)(\s*)$/m', "<h2>$1</h2>$2", $c);
-    $c = preg_replace('/^# (.+?)(\s*)$/m', "<h1>$1</h1>$2", $c);
+    $c = preg_replace('/^###### (.+?)(\s*)$/m', '<h6>$1</h6>$2', $c);
+    $c = preg_replace('/^##### (.+?)(\s*)$/m', '<h5>$1</h5>$2', $c);
+    $c = preg_replace('/^#### (.+?)(\s*)$/m', '<h4>$1</h4>$2', $c);
+    $c = preg_replace('/^### (.+?)(\s*)$/m', '<h3>$1</h3>$2', $c);
+    $c = preg_replace('/^## (.+?)(\s*)$/m', '<h2>$1</h2>$2', $c);
+    $c = preg_replace('/^# (.+?)(\s*)$/m', '<h1>$1</h1>$2', $c);
     
-    $c = preg_replace("/^>+ (.+?)(\s*)$/m", "<blockquote>$1</blockquote>$2", $c);
+    $c = preg_replace("/^>+ (.+?)(\s*)$/m", '<blockquote>$1</blockquote>$2', $c);
 
     $c = preg_replace('/!\[(.+?):(\d+)\]\((.+?)\)/', '<img alt="$1" width="$2" src="$3">', $c);
     $c = preg_replace('/!\[(.+?)\]\((.+?)\)/', '<img alt="$1" src="$2">', $c);
     $c = preg_replace('/\[(.+?)\]\((.+?)\)/', '<a href="$2">$1</a>', $c);
 
     $c = preg_replace("/^[*+-] (.+?)(\s*)$/m", '<dli>$1</dli>$2', $c);
-    $c = preg_replace("/(\s{2,})(<dli>[\s\S]+<\/dli>)(\s{2,})/m", "$1<ul>\n$2\n</ul>$3", $c);
+    $c = preg_replace("/(\s{2,})(<dli>[\s\S]+<\/dli>)(\s{2,})/m", '$1<ul>\n$2\n</ul>$3', $c);
     $c = preg_replace("/(dli>)/", "li>", $c);
 
     $c = preg_replace("/^\d+\. (.+?)(\s*)$/m", '<dli>$1</dli>$2', $c);
-    $c = preg_replace("/(\s{2,})(<dli>[\s\S]+<\/dli>)(\s{2,})/m", "$1<ol>\n$2\n</ol>$3", $c);
+    $c = preg_replace("/(\s{2,})(<dli>[\s\S]+<\/dli>)(\s{2,})/m", '$1<ol>\n$2\n</ol>$3', $c);
     $c = preg_replace("/(dli>)/", "li>", $c);
     
-    $c = preg_replace('/\*\*(\S.*?\S*)\*\*/', "<strong>$1</strong>", $c);
-    $c = preg_replace('/\*(\S.*?\S*)\*/', "<em>$1</em>", $c);
+    $c = preg_replace('/\*\*(\S.*?\S*)\*\*/', '<strong>$1</strong>', $c);
+    $c = preg_replace('/\*(\S.*?\S*)\*/', '<em>$1</em>', $c);
+    $c = preg_replace('/-(\S.*?\S*)-/', '<span style="text-decoration: line-through">$1</span>', $c);
 
     $t = preg_match_all("/```([\s\S]+?)```/m", $c, $matches);
     if ($matches) {
@@ -104,10 +105,10 @@ function markdown($rp) {
         }
     }
 
-    $c = preg_replace("/```([\s\S]+?)```/m", "<code>$1</code>$2", $c);
-    $c = preg_replace("/`(.+?)`/", "<code>$1</code>$2", $c);
+    $c = preg_replace("/```([\s\S]+?)```/m", '<code>$1</code>$2', $c);
+    $c = preg_replace("/`(.+?)`/", '<code>$1</code>$2', $c);
     
-    $c = preg_replace("/^(<img |<a |<span|<strong|<em)*([^<\s].*?)(\s*)$/m", "<p>$1$2</p>$3", $c);
+    $c = preg_replace("/^(<img |<a |<span|<strong|<em)*([^<\s].*?)(\s*)$/m", '<p>$1$2</p>$3', $c);
     return $c;
 }
 

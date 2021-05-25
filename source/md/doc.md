@@ -22,7 +22,7 @@ if (codeblock) {
 2. b
 3. c
 
-p1 **strong** *em* ***strongem***
+p1 **strong** *em* ***strongem*** -strike-
 
 p2
 
