@@ -91,11 +91,13 @@ function markdown($rp) {
     $c = preg_replace('/\[(.+?)\]\((.+?)\)/', '<a href="$2">$1</a>', $c);
 
     $c = preg_replace("/^[*+-] (.+?)(\s*)$/m", '<dli>$1</dli>$2', $c);
-    $c = preg_replace("/(\s{2,})(<dli>[\s\S]+<\/dli>)(\s{2,})/m", '$1<ul>\n$2\n</ul>$3', $c);
+    $c = preg_replace("/(^|\s{3,})<dli/", "$1<ul>\n<dli", $c);
+    $c = preg_replace("/dli>(\s{3,})/m", "dli>\n</ul>$1", $c);
     $c = preg_replace("/(dli>)/", "li>", $c);
 
     $c = preg_replace("/^\d+\. (.+?)(\s*)$/m", '<dli>$1</dli>$2', $c);
-    $c = preg_replace("/(\s{2,})(<dli>[\s\S]+<\/dli>)(\s{2,})/m", '$1<ol>\n$2\n</ol>$3', $c);
+    $c = preg_replace("/(^|\s{3,})<dli/", "$1<ul>\n<dli", $c);
+    $c = preg_replace("/dli>(\s{3,})/m", "dli>\n</ul>$1", $c);
     $c = preg_replace("/(dli>)/", "li>", $c);
     
     $c = preg_replace('/\*\*(\S.*?\S*)\*\*/', '<strong>$1</strong>', $c);
