@@ -1,3 +1,3 @@
-test
 default
-dir/inner
+test
+dir/*

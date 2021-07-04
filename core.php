@@ -21,6 +21,12 @@ function render($rp) {
         $c = preproc($rp);
     }
 
+    if ($dump = 0) {
+        header('Content-type: text/plain');
+        echo $c;
+        die();
+    }
+
     if (!file_exists('temp')) { mkdir('temp'); }
 
     $trp = preg_replace('/\//', '.', $frp);
@@ -61,9 +67,10 @@ function preproc($rp) {
     $c = preg_replace('/\{\{(.+?)\}\}/', "<?php render('source/php/$1.php') ?>", $c);
     $c = preg_replace('/@else/', "<?php else : ?>", $c);
     $c = preg_replace('/@e(\w+)(.+)/', "<?php end$1; ?>", $c);
-    $c = preg_replace('/@(\w+)(.+)/', "<?php $1 ($2) : ?>", $c);
-    $c = preg_replace('/\{(.+?)=(.+?)\}/', "<?php \$$1 = $2; ?>", $c);
-    $c = preg_replace('/\{(.+?)\}/', "<?= \$$1 ?>", $c);
+    $c = preg_replace('/@([a-z].+?) (.+)/', "<?php $1 ($2) : ?>", $c);
+    $c = preg_replace('/\{([A-Z][A-z0-9_]*?)\}/', "<?= $1 ?>", $c);
+    $c = preg_replace('/\{([a-z][^=]*?)\}/', "<?= \$$1 ?>", $c);
+    $c = preg_replace('/\{(.+?)=(.+?)\}/', "<?php \$$1=$2; ?>", $c);
     return $c;
 }
 

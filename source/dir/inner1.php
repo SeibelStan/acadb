@@ -1,5 +1,5 @@
 {{header}}
 
-inner dir
+dir/inner1 !
 
 {{footer}}

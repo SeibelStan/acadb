@@ -9,6 +9,7 @@ if (!file_exists('static')) { mkdir('static'); }
 require('core.php');
 
 $URI = $_SERVER['REQUEST_URI'];
+$URI = preg_replace('/_$/', '', $URI);
 
 $path = preg_replace('/^\//', '', $URI);
 $path = explode('?', preg_replace('#' . ROOT . '#', '', $path))[0] ?: 'index';
