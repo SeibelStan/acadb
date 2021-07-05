@@ -96,8 +96,8 @@ function markdown($rp) {
     $c = preg_replace("/(dli>)/", "li>", $c);
 
     $c = preg_replace("/^\d+\. (.+?)(\s*)$/m", '<dli>$1</dli>$2', $c);
-    $c = preg_replace("/(^|\s{3,})<dli/", "$1<ul>\n<dli", $c);
-    $c = preg_replace("/dli>(\s{3,})/m", "dli>\n</ul>$1", $c);
+    $c = preg_replace("/(^|\s{3,})<dli/", "$1<ol>\n<dli", $c);
+    $c = preg_replace("/dli>(\s{3,})/m", "dli>\n</ol>$1", $c);
     $c = preg_replace("/(dli>)/", "li>", $c);
     
     $c = preg_replace('/\*\*(\S.*?\S*)\*\*/', '<strong>$1</strong>', $c);
